@@ -31,8 +31,8 @@ attributes:
 """
 function load_gridded_nc(fname::AbstractString,varname::AbstractString; minfrac = 0.05)
     ds = Dataset(fname);
-    lon = nomissing(ds["lon"][:])
-    lat = nomissing(ds["lat"][:])
+    lon = nomissing(ds["longitude"][:])
+    lat = nomissing(ds["latitude"][:])
     time = nomissing(ds["time"][:])
     data = nomissing(ds[varname][:,:,:],NaN)
 
@@ -660,29 +660,29 @@ function ncsetup(fname,varnames,(lon,lat),meandata; output_ndims = 1)
 
     # dimensions
     defDim(ds,"time", Inf)
-    defDim(ds,"lon", length(lon))
-    defDim(ds,"lat", length(lat))
+    defDim(ds,"longitude", length(lon))
+    defDim(ds,"latitude", length(lat))
 
     # variables
-    nc_lon = defVar(ds,"lon", Float32, ("lon",))
-    nc_lat = defVar(ds,"lat", Float32, ("lat",))
+    nc_lon = defVar(ds,"longitude", Float32, ("longitude",))
+    nc_lat = defVar(ds,"latitude", Float32, ("latitude",))
 
 
     for (i,varname) in enumerate(varnames)
         nc_batch_m_rec = defVar(
             ds,
-            varname, Float32, ("lon","lat","time"),
+            varname, Float32, ("longitude","latitude","time"),
             fillvalue=fill_value)
 
         nc_batch_sigma_rec = defVar(
             ds,
-            varname * "_error", Float32, ("lon","lat","time"),
+            varname * "_error", Float32, ("longitude","latitude","time"),
             fillvalue=fill_value)
 
         if output_ndims == 1
             nc_meandata = defVar(
                 ds,
-                varname * "_mean", Float32, ("lon","lat"),
+                varname * "_mean", Float32, ("longitude","latitude"),
                 fillvalue=fill_value)
 
             nc_meandata[:,:] = replace(meandata[:,:,i], NaN => missing)
@@ -694,7 +694,7 @@ function ncsetup(fname,varnames,(lon,lat),meandata; output_ndims = 1)
 
         defVar(
             ds,
-            (varnames[1] * "_" * varnames[2] * "_covar"), Float32, ("lon","lat","time"),
+            (varnames[1] * "_" * varnames[2] * "_covar"), Float32, ("longitude","latitude","time"),
             fillvalue=fill_value)
     end
 

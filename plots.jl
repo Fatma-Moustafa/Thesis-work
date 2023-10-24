@@ -79,8 +79,8 @@ function plotres(case, fname_rec; transfun = (identity,identity),
     ds_cv = Dataset(fname_cv);
     ds_orig = Dataset(fname_orig);
     ds_rec = Dataset(fname_rec);
-    lon = ds_orig["lon"][:]
-    lat = ds_orig["lat"][:]
+    lon = ds_orig["longitude"][:]
+    lat = ds_orig["latitude"][:]
     time = ds_orig["time"][:]
     #fn = log10
     fn = transfun[1]
@@ -194,8 +194,8 @@ function plotvec(cases,fnameavg,varnames;
     mkpath(figdir)
 
     ds = NCDataset(fnameavg)
-    lon = ds["lon"][:]
-    lat = ds["lat"][:]
+    lon = ds["longitude"][:]
+    lat = ds["latitude"][:]
 
     fnames = [case.fname_orig for case in cases]
     fnames_cv = [case.fname_cv for case in cases]

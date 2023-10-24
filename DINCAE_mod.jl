@@ -7,7 +7,7 @@ using NCDatasets
 using Printf
 using Statistics
 using ThreadsX
-using Knet
+#using Knet
 using ChainRulesCore
 using Base.Iterators
 

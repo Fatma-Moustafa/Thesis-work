@@ -19,8 +19,8 @@ bias(x,y) = mean(x) - mean(y)
 
 function loadbatch_scalar(case,fname)
     ds = Dataset(fname);
-    lon = ds["lon"][:]
-    lat = ds["lat"][:]
+    lon = ds["longitude"][:]
+    lat = ds["latitude"][:]
 
     # all data
     ntest = ds.dim["time"]
@@ -60,7 +60,7 @@ function loadbatch_scalar(case,fname)
 
     ds = Dataset(case.fname_cv);
     batch_m_in = ds[case.varname][:,:,end-ntest+1:end]
-    mask = ds["mask"][:];
+    mask = ds["mask"][:,:];
     close(ds)
 
     ds = Dataset(case.fname_orig);
@@ -118,8 +118,8 @@ end
 
 function loadradials(case,fname)
     ds = Dataset(fname);
-    lon = ds["lon"][:]
-    lat = ds["lat"][:]
+    lon = ds["longitude"][:]
+    lat = ds["latitude"][:]
 
     # all data
     n = 1:ds.dim["time"]
@@ -142,7 +142,7 @@ function loadradials(case,fname)
 
     ds = Dataset(case.fname_cv);
     batch_m_in = ds[case.varname][:,:,n]
-    mask = ds["mask"][:];
+    mask = ds["mask"][:,:];
     close(ds)
 
     ds = Dataset(case.fname_orig);
@@ -172,10 +172,17 @@ function summary(case,fname;
     else
         lon,lat,batch_m_true,batch_m_in,batch_m_rec,batch_sigma_rec,mask = loadbatch(case,fname)
         @show size(batch_m_true)
+        @show size(batch_m_in)
+        @show size(batch_m_rec)
+        @show size(batch_sigma_rec)
+        @show size(mask)
+        
+      
         mm = (ismissing.(batch_m_in) .&
             .!ismissing.(batch_m_true) .&
             .!ismissing.(batch_m_rec) .&
             reshape(mask .== 1,(size(mask,1),size(mask,2),1)));
+        @show size(mm)    
         #mm = ismissing.(batch_m_in) .& .!ismissing.(batch_m_true)
         m_true = batch_m_true[mm]
         m_rec = batch_m_rec[mm]
@@ -280,9 +287,9 @@ end
 
 function loadrec(fnamerec)
     Dataset(fnamerec) do ds
-        if haskey(ds,"lon")
-            glon = nomissing(ds["lon"][:])
-            glat = nomissing(ds["lat"][:])
+        if haskey(ds,"longitude")
+            glon = nomissing(ds["longitude"][:])
+            glat = nomissing(ds["latitude"][:])
             gtime = nomissing(ds["time"][:])
             gu = nomissing(ds["u"][:],NaN)
             gv = nomissing(ds["v"][:],NaN)

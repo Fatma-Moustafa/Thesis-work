@@ -76,10 +76,10 @@ function add_mask(fname,varname; minseafrac = 0.05)
 
         var = ds[varname]
         mask, count_nomissing = compute_mask(var; minseafrac = minseafrac)
-        defVar(ds,"mask",Int8.(mask[:,:,1]),("lon","lat"), attrib = [
+        defVar(ds,"mask",Int8.(mask[:,:,1]),("longitude","latitude"), attrib = [
             "long_name" => "mask (sea=1, land=0)"
         ])
-        defVar(ds,"count_nomissing",Int32.(count_nomissing[:,:,1]),("lon","lat"), attrib = [
+        defVar(ds,"count_nomissing",Int32.(count_nomissing[:,:,1]),("longitude","latitude"), attrib = [
             "long_name" => "number of persent data"
         ])
     end

@@ -68,11 +68,11 @@ end
 # See the documentation of `DINCAE.reconstruct` for more information.
 
 # Use these parameters for a quick test:
-epochs = 3
-batch_size = 2
+epochs = 500
+batch_size = 8
 save_each = 10
 skipconnections = [1,2]
-enc_nfilter_internal =[10]
+enc_nfilter_internal =[16,24,36]
 clip_grad = 5.0
 regularization_L2_beta = 0
 #save_epochs = 100:10:epochs
